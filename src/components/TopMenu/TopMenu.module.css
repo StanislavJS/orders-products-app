@@ -1,0 +1,27 @@
+.topMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #368c4b;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid #444;
+}
+
+.leftBlock,
+.centerBlock,
+.rightBlock {
+  display: flex;
+  align-items: center;
+}
+
+.rightBlock button {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.time {
+  margin-right: 1rem;
+}
