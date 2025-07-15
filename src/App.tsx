@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import NavigationMenu from './components/NavigationMenu/NavigationMenu';
 import TopMenu from './components/TopMenu/TopMenu';
@@ -9,64 +9,23 @@ import styles from './App.module.css';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store/store';
 import LoginModal from './components/LoginModal/LoginModal';
+import { useWebSocket } from './hooks/useWebSocket';
 
-
-
-
-const WEBSOCKET_URL = import.meta.env.VITE_WS_URL;
-
+const WEBSOCKET_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8080';
 
 const App: React.FC = () => {
-  const [sessionCount, setSessionCount] = useState<number>(1);
-  const wsRef = useRef<WebSocket | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
-
-  useEffect(() => {
-    function connect() {
-      wsRef.current = new WebSocket(WEBSOCKET_URL);
-
-      wsRef.current.onopen = () => {
-        console.log('✅ WebSocket connected');
-      };
-
-      wsRef.current.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (data.type === 'session_count') {
-            setSessionCount(data.count);
-          }
-        } catch (err) {
-          console.error('⛔ Invalid WebSocket message:', err);
-        }
-      };
-
-      wsRef.current.onerror = (err) => {
-        console.error('⛔ WebSocket error:', err);
-      };
-
-      wsRef.current.onclose = () => {
-        console.log('🔌 WebSocket disconnected, reconnecting in 3s...');
-        setTimeout(connect, 3000);
-      };
-    }
-
-    connect();
-
-    return () => {
-      wsRef.current?.close();
-    };
-  }, []);
+  const { sessionCount } = useWebSocket(WEBSOCKET_URL);
 
   if (!user) {
     return (
       <>
         <TopMenu sessionCount={sessionCount} />
-        <LoginModal /> {/* Модалка логіну */}
+        <LoginModal /> {/* Модалка логина */}
       </>
     );
   }
 
-  // Якщо залогінений, показуємо основний інтерфейс:
   return (
     <Router>
       <TopMenu sessionCount={sessionCount} />
