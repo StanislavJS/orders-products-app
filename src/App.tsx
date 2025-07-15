@@ -13,8 +13,8 @@ import LoginModal from './components/LoginModal/LoginModal';
 
 
 
+const WEBSOCKET_URL = import.meta.env.VITE_WS_URL;
 
-const WEBSOCKET_URL = 'ws://localhost:8080';
 
 const App: React.FC = () => {
   const [sessionCount, setSessionCount] = useState<number>(1);
