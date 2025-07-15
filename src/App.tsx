@@ -11,7 +11,9 @@ import type { RootState } from './store/store';
 import LoginModal from './components/LoginModal/LoginModal';
 import { useWebSocket } from './hooks/useWebSocket';
 
-const WEBSOCKET_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8080';
+const WEBSOCKET_URL = 'wss://orders-products-ws-server-production.up.railway.app';
+
+
 
 const App: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
